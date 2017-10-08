@@ -1,0 +1,22 @@
+{
+  "name": "timestamp-ms",
+  "version": "0.0.0",
+  "description": "freeCodeCamp timestamp microservice project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevcomedia/timestamp-ms.git"
+  },
+  "author": "Kev Comedia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevcomedia/timestamp-ms/issues"
+  },
+  "homepage": "https://github.com/kevcomedia/timestamp-ms#readme",
+  "dependencies": {
+    "express": "^4.16.1"
+  }
+}
