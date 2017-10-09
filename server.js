@@ -35,3 +35,5 @@ app.get('/:date', function(req, res) {
 app.listen(port, function() {
   console.log("App is alive at port " + port);
 });
+
+module.exports = app;
