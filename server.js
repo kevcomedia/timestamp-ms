@@ -10,7 +10,10 @@ app.get('/', function(req, res) {
 
 app.get('/:date', function(req, res) {
   const {date} = req.params;
-  const timestamp = {};
+  const timestamp = {
+    unix: null,
+    natural: null
+  };
 
   // Unix time
   if (!Number.isNaN(+date)) {
