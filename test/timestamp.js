@@ -107,6 +107,24 @@ describe('Timestamp', () => {
         .get('/1970 January 1')
         .end(test(done));
     });
+
+    it('should accept <Month Day Year> with short month names', (done) => {
+      chai.request(server)
+        .get('/Jan 1 1970')
+        .end(test(done));
+    });
+
+    it('should accept <Day Month Year> with short month names', (done) => {
+      chai.request(server)
+        .get('/1 Jan 1970')
+        .end(test(done));
+    });
+
+    it('should accept <Year Month Day> with short month names', (done) => {
+      chai.request(server)
+        .get('/1970 Jan 1')
+        .end(test(done));
+    });
   });
 
   describe('Invalid input', () => {
