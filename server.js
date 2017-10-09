@@ -17,11 +17,16 @@ app.get('/:date', function(req, res) {
     natural: null
   };
 
-  const m = moment.unix(date);
-  // Unix time
-  if (!Number.isNaN(m.unix())) {
+  if (!Number.isNaN(Number.parseInt(date, 10))) {
+    const m = moment.unix(date);
     timestamp.unix = m.unix();
-    timestamp.natural = m.format('MMMM D YYYY');
+    timestamp.natural = m.format('MMMM D, YYYY');
+  } else {
+    const m = moment.utc(date);
+    if (m.isValid()) {
+      timestamp.unix = m.unix();
+      timestamp.natural = m.format('MMMM D, YYYY');
+    }
   }
 
   res.json(timestamp);
