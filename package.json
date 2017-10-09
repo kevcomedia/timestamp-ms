@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/kevcomedia/timestamp-ms#readme",
   "dependencies": {
-    "express": "^4.16.1"
+    "express": "^4.16.1",
+    "moment": "^2.18.1"
   },
   "devDependencies": {
     "nodemon": "^1.12.1"

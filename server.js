@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+const moment = require('moment');
+
 const port = process.env.PORT || 3000;
 
 // Sample route
@@ -15,16 +17,11 @@ app.get('/:date', function(req, res) {
     natural: null
   };
 
+  const m = moment.unix(date);
   // Unix time
-  if (!Number.isNaN(+date)) {
-    const natural = new Date(date * 1000);
-    const dateOptions = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    };
-    timestamp.unix = +date;
-    timestamp.natural = natural.toLocaleDateString('en-US', dateOptions);
+  if (!Number.isNaN(m.unix())) {
+    timestamp.unix = m.unix();
+    timestamp.natural = m.format('MMMM D YYYY');
   }
 
   res.json(timestamp);
