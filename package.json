@@ -2,9 +2,9 @@
   "name": "timestamp-ms",
   "version": "0.0.0",
   "description": "freeCodeCamp timestamp microservice project",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "watch": "nodemon server.js",
+    "start": "nodemon index.js",
     "test": "mocha"
   },
   "repository": {

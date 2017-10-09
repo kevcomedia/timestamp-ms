@@ -2,12 +2,23 @@ process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../server');
+const app = require('../app');
+
 const should = chai.should();
 
 chai.use(chaiHttp);
 
 describe('Timestamp', () => {
+  let server;
+
+  before(() => {
+    server = app.listen(8888, () => {
+      console.log('App is alive at port 8888 for testing.');
+    });
+  });
+
+  after(() => server.close());
+
   describe('Proper output keys', () => {
     it('should return proper format for unix time input', (done) => {
       chai.request(server)

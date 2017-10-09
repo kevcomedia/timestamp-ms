@@ -3,8 +3,6 @@ const app = express();
 
 const moment = require('moment');
 
-const port = process.env.NODE_ENV == 'test' ? 8888 : (process.env.PORT || 3000);
-
 // Sample route
 app.get('/', function(req, res) {
   res.send('Timestamp microservice');
@@ -30,10 +28,6 @@ app.get('/:date', function(req, res) {
   }
 
   res.json(timestamp);
-});
-
-app.listen(port, function() {
-  console.log("App is alive at port " + port);
 });
 
 module.exports = app;
