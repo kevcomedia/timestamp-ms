@@ -4,6 +4,7 @@
   "description": "freeCodeCamp timestamp microservice project",
   "main": "server.js",
   "scripts": {
+    "watch": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +18,10 @@
   },
   "homepage": "https://github.com/kevcomedia/timestamp-ms#readme",
   "dependencies": {
-    "express": "^4.16.1"
+    "express": "^4.16.1",
+    "moment": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
   }
 }
