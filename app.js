@@ -15,15 +15,17 @@ app.get('/:date', function(req, res) {
     natural: null
   };
 
-  if (!Number.isNaN(Number.parseInt(date, 10))) {
-    const m = moment.unix(date);
-    timestamp.unix = m.unix();
-    timestamp.natural = m.format('MMMM D, YYYY');
-  } else {
-    const m = moment.utc(date);
+  {
+    let m = moment.unix(date);
     if (m.isValid()) {
       timestamp.unix = m.unix();
       timestamp.natural = m.format('MMMM D, YYYY');
+    } else {
+      m = moment.utc(date);
+      if (m.isValid()) {
+        timestamp.unix = m.unix();
+        timestamp.natural = m.format('MMMM D, YYYY');
+      }
     }
   }
 
