@@ -18,40 +18,30 @@ describe('Timestamp', () => {
   after(() => server.close());
 
   describe('Proper output keys', () => {
+    const test = (done, code = 200) => (err, res) => {
+      res.should.have.status(code);
+      res.body.should.be.an('object');
+      res.body.should.have.own.property('unix');
+      res.body.should.have.own.property('natural');
+      done();
+    };
+
     it('should return proper format for unix time input', (done) => {
       chai.request(server)
         .get('/0')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix');
-          res.body.should.have.own.property('natural');
-          done();
-        });
+        .end(test(done));
     });
 
     it('should return proper format for natural date input', (done) => {
       chai.request(server)
         .get('/January 1, 1970')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix');
-          res.body.should.have.own.property('natural');
-          done();
-        });
+        .end(test(done));
     });
 
     it('should return proper format for invalid input', (done) => {
       chai.request(server)
         .get('/invalid')
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix');
-          res.body.should.have.own.property('natural');
-          done();
-        });
+        .end(test(done, 400));
     });
   });
 
