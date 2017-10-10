@@ -18,28 +18,34 @@ describe('Timestamp', () => {
   after(() => server.close());
 
   describe('Proper output keys', () => {
-    const test = (done, code = 200) => (err, res) => {
+    const inputs = [
+      {
+        label: 'should return proper format for unix time input',
+        route: '/0',
+      },
+      {
+        label: 'should return proper format for natural date input',
+        route: '/January 1, 1970',
+      },
+      {
+        label: 'should return proper format for invalid input',
+        route: '/invalid',
+        expectedStatusCode: 400
+      }
+    ];
+
+    const end = (done, code = 200) => (err, res) => {
       res.should.have.status(code);
       res.body.should.be.an('object').that.has.all.keys('unix', 'natural');
       done();
     };
 
-    it('should return proper format for unix time input', (done) => {
-      chai.request(server)
-        .get('/0')
-        .end(test(done));
-    });
-
-    it('should return proper format for natural date input', (done) => {
-      chai.request(server)
-        .get('/January 1, 1970')
-        .end(test(done));
-    });
-
-    it('should return proper format for invalid input', (done) => {
-      chai.request(server)
-        .get('/invalid')
-        .end(test(done, 400));
+    inputs.forEach(({label, route, expectedStatusCode}) => {
+      it(label, (done) => {
+        chai.request(server)
+          .get(route)
+          .end(end(done, expectedStatusCode));
+      });
     });
   });
 
