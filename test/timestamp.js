@@ -20,9 +20,7 @@ describe('Timestamp', () => {
   describe('Proper output keys', () => {
     const test = (done, code = 200) => (err, res) => {
       res.should.have.status(code);
-      res.body.should.be.an('object');
-      res.body.should.have.own.property('unix');
-      res.body.should.have.own.property('natural');
+      res.body.should.be.an('object').that.has.all.keys('unix', 'natural');
       done();
     };
 
