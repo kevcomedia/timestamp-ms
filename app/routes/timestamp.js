@@ -28,6 +28,7 @@ function createTimestampObject(m = null) {
 function getTimestamp(req, res) {
   const {date} = req.params;
   let timestamp;
+  let statusCode = 200;
 
   const fromUnix = moment.unix(date);
   const fromNatural
@@ -39,9 +40,10 @@ function getTimestamp(req, res) {
     timestamp = createTimestampObject(fromNatural);
   } else {
     timestamp = createTimestampObject();
+    statusCode = 400;
   }
 
-  res.json(timestamp);
+  res.status(statusCode).json(timestamp);
 }
 
 module.exports = {getTimestamp};
