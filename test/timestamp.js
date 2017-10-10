@@ -56,7 +56,7 @@ describe('Timestamp', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
-          res.body.should.have.own.property('unix').eql(-100);
+          res.body.should.have.own.property('unix').equal(-100);
           done();
         });
     });
@@ -67,7 +67,7 @@ describe('Timestamp', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
-          res.body.should.have.own.property('unix').eql(1);
+          res.body.should.have.own.property('unix').equal(1);
           done();
         });
     });
@@ -77,8 +77,8 @@ describe('Timestamp', () => {
     const test = (done) => (err, res) => {
       res.should.have.status(200);
       res.body.should.be.an('object');
-      res.body.should.have.own.property('unix').eql(0);
-      res.body.should.have.own.property('natural').eql('January 1, 1970');
+      res.body.should.have.own.property('unix').equal(0);
+      res.body.should.have.own.property('natural').equal('January 1, 1970');
       done();
     };
 
