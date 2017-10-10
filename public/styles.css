@@ -1,0 +1,19 @@
+h1 {
+  margin-bottom: 1em;
+}
+
+h2,
+.usage {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .usage,
+  .usage h2 {
+    text-align: right;
+  }
+
+  .output h2 {
+    text-align: left;
+  }
+}
