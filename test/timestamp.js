@@ -36,7 +36,7 @@ describe('Timestamp', () => {
 
     const end = (done, code = 200) => (err, res) => {
       res.should.have.status(code);
-      res.body.should.be.an('object').that.has.all.keys('unix', 'natural');
+      res.body.should.be.an('object').that.has.all.own.keys('unix', 'natural');
       done();
     };
 
@@ -109,8 +109,8 @@ describe('Timestamp', () => {
     const end = (done) => (err, res) => {
       res.should.have.status(200);
       res.body.should.be.an('object');
-      res.body.should.have.own.property('unix').equal(0);
-      res.body.should.have.own.property('natural').equal('January 1, 1970');
+      res.body.should.have.property('unix').equal(0);
+      res.body.should.have.property('natural').equal('January 1, 1970');
       done();
     };
 
@@ -138,8 +138,8 @@ describe('Timestamp', () => {
     const end = (done) => (err, res) => {
       res.should.have.status(400);
       res.body.should.be.an('object');
-      res.body.should.have.own.property('unix').that.is.null;
-      res.body.should.have.own.property('natural').that.is.null;
+      res.body.should.have.property('unix').that.is.null;
+      res.body.should.have.property('natural').that.is.null;
       done();
     };
 
