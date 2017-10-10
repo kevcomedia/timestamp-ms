@@ -1,12 +1,10 @@
+const path = require('path');
 const express = require('express');
 const app = express();
 
 const timestamp = require('./app/routes/timestamp');
 
-// Sample route
-app.get('/', function(req, res) {
-  res.send('Timestamp microservice');
-});
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/:date', timestamp.getTimestamp);
 
