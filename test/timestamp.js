@@ -79,7 +79,34 @@ describe('Timestamp', () => {
   });
 
   describe('Natural date input', () => {
-    const test = (done) => (err, res) => {
+    const inputs = [
+      {
+        label: 'should accept <Month Day Year> format',
+        route: '/January 1 1970'
+      },
+      {
+        label: 'should accept <Day Month Year> format',
+        route: '/1 January 1970'
+      },
+      {
+        label: 'should accept <Year Month Day> format',
+        route: '/1970 January 1'
+      },
+      {
+        label: 'should accept <Month Day Year> format with short month names',
+        route: '/Jan 1 1970'
+      },
+      {
+        label: 'should accept <Day Month Year> format with short month names',
+        route: '/1 Jan 1970'
+      },
+      {
+        label: 'should accept <Year Month Day> format with short month names',
+        route: '/1970 Jan 1'
+      },
+    ];
+
+    const end = (done) => (err, res) => {
       res.should.have.status(200);
       res.body.should.be.an('object');
       res.body.should.have.own.property('unix').equal(0);
@@ -87,40 +114,12 @@ describe('Timestamp', () => {
       done();
     };
 
-    it('should accept <Month Day Year> format', (done) => {
-      chai.request(server)
-        .get('/January 1 1970')
-        .end(test(done));
-    });
-
-    it('should accept <Day Month Year> format', (done) => {
-      chai.request(server)
-        .get('/1 January 1970')
-        .end(test(done));
-    });
-
-    it('should accept <Year Month Day> format', (done) => {
-      chai.request(server)
-        .get('/1970 January 1')
-        .end(test(done));
-    });
-
-    it('should accept <Month Day Year> with short month names', (done) => {
-      chai.request(server)
-        .get('/Jan 1 1970')
-        .end(test(done));
-    });
-
-    it('should accept <Day Month Year> with short month names', (done) => {
-      chai.request(server)
-        .get('/1 Jan 1970')
-        .end(test(done));
-    });
-
-    it('should accept <Year Month Day> with short month names', (done) => {
-      chai.request(server)
-        .get('/1970 Jan 1')
-        .end(test(done));
+    inputs.forEach(({label, route}) => {
+      it(label, (done) => {
+        chai.request(server)
+          .get(route)
+          .end(end(done));
+      });
     });
   });
 
