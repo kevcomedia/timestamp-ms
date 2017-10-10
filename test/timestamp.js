@@ -12,144 +12,143 @@ describe('Timestamp', () => {
   let server;
 
   before(() => {
-    server = app.listen(8888, () => {
-      console.log('App is alive at port 8888 for testing.');
-    });
+    server = app.listen(8888);
   });
 
   after(() => server.close());
 
   describe('Proper output keys', () => {
-    it('should return proper format for unix time input', (done) => {
-      chai.request(server)
-        .get('/0')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix');
-          res.body.should.have.own.property('natural');
-          done();
-        });
-    });
+    const inputs = [
+      {
+        label: 'should return proper format for unix time input',
+        route: '/0',
+      },
+      {
+        label: 'should return proper format for natural date input',
+        route: '/January 1, 1970',
+      },
+      {
+        label: 'should return proper format for invalid input',
+        route: '/invalid',
+        expectedStatusCode: 400
+      }
+    ];
 
-    it('should return proper format for natural date input', (done) => {
-      chai.request(server)
-        .get('/January 1, 1970')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix');
-          res.body.should.have.own.property('natural');
-          done();
-        });
-    });
+    const end = (done, code = 200) => (err, res) => {
+      res.should.have.status(code);
+      res.body.should.be.an('object').that.has.all.own.keys('unix', 'natural');
+      done();
+    };
 
-    it('should return proper format for invalid input', (done) => {
-      chai.request(server)
-        .get('/invalid')
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix');
-          res.body.should.have.own.property('natural');
-          done();
-        });
+    inputs.forEach(({label, route, expectedStatusCode}) => {
+      it(label, (done) => {
+        chai.request(server)
+          .get(route)
+          .end(end(done, expectedStatusCode));
+      });
     });
   });
 
   describe('Unix time input', () => {
-    it('should accept negative Unix time', (done) => {
-      chai.request(server)
-        .get('/-100')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix').eql(-100);
-          done();
-        });
-    });
+    const inputs = [
+      {
+        label: 'should accept negative Unix time',
+        route: '/-100',
+        expectedUnixTime: -100
+      },
+      {
+        label: 'should truncate fractional Unix time',
+        route: '/1.5',
+        expectedUnixTime: 1
+      }
+    ];
 
-    it('should truncate fractional Unix time', (done) => {
-      chai.request(server)
-        .get('/1.5')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix').eql(1);
-          done();
-        });
+    const end = (done, expectedUnixTime) => (err, res) => {
+      res.should.have.status(200);
+      res.body.should.be.an('object').that.has.property('unix').equal(expectedUnixTime);
+      done();
+    };
+
+    inputs.forEach(({label, route, expectedUnixTime}) => {
+      it(label, (done) => {
+        chai.request(server)
+          .get(route)
+          .end(end(done, expectedUnixTime));
+      });
     });
   });
 
   describe('Natural date input', () => {
-    const test = (done) => (err, res) => {
+    const inputs = [
+      {
+        label: 'should accept <Month Day Year> format',
+        route: '/January 1 1970'
+      },
+      {
+        label: 'should accept <Day Month Year> format',
+        route: '/1 January 1970'
+      },
+      {
+        label: 'should accept <Year Month Day> format',
+        route: '/1970 January 1'
+      },
+      {
+        label: 'should accept <Month Day Year> format with short month names',
+        route: '/Jan 1 1970'
+      },
+      {
+        label: 'should accept <Day Month Year> format with short month names',
+        route: '/1 Jan 1970'
+      },
+      {
+        label: 'should accept <Year Month Day> format with short month names',
+        route: '/1970 Jan 1'
+      },
+    ];
+
+    const end = (done) => (err, res) => {
       res.should.have.status(200);
       res.body.should.be.an('object');
-      res.body.should.have.own.property('unix').eql(0);
-      res.body.should.have.own.property('natural').eql('January 1, 1970');
+      res.body.should.have.property('unix').equal(0);
+      res.body.should.have.property('natural').equal('January 1, 1970');
       done();
     };
 
-    it('should accept <Month Day Year> format', (done) => {
-      chai.request(server)
-        .get('/January 1 1970')
-        .end(test(done));
-    });
-
-    it('should accept <Day Month Year> format', (done) => {
-      chai.request(server)
-        .get('/1 January 1970')
-        .end(test(done));
-    });
-
-    it('should accept <Year Month Day> format', (done) => {
-      chai.request(server)
-        .get('/1970 January 1')
-        .end(test(done));
-    });
-
-    it('should accept <Month Day Year> with short month names', (done) => {
-      chai.request(server)
-        .get('/Jan 1 1970')
-        .end(test(done));
-    });
-
-    it('should accept <Day Month Year> with short month names', (done) => {
-      chai.request(server)
-        .get('/1 Jan 1970')
-        .end(test(done));
-    });
-
-    it('should accept <Year Month Day> with short month names', (done) => {
-      chai.request(server)
-        .get('/1970 Jan 1')
-        .end(test(done));
+    inputs.forEach(({label, route}) => {
+      it(label, (done) => {
+        chai.request(server)
+          .get(route)
+          .end(end(done));
+      });
     });
   });
 
   describe('Invalid input', () => {
-    it('should treat non-date formats as invalid', (done) => {
-      chai.request(server)
-        .get('/a')
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix').to.be.null;
-          res.body.should.have.own.property('natural').to.be.null;
-          done();
-        });
-    });
+    const inputs = [
+      {
+        label: 'should treat non-date formats as invalid',
+        route: '/a'
+      },
+      {
+        label: 'should treat unsafe integers as invalid',
+        route: '/9007199254740992'
+      }
+    ];
 
-    it('should treat unsafe integers as invalid', (done) => {
-      chai.request(server)
-        .get('/9007199254740992')
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix').to.be.null;
-          res.body.should.have.own.property('natural').to.be.null;
-          done();
-        });
+    const end = (done) => (err, res) => {
+      res.should.have.status(400);
+      res.body.should.be.an('object');
+      res.body.should.have.property('unix').that.is.null;
+      res.body.should.have.property('natural').that.is.null;
+      done();
+    };
+
+    inputs.forEach(({label, route}) => {
+      it(label, (done) => {
+        chai.request(server)
+          .get(route)
+          .end(end(done));
+      });
     });
   });
 });
