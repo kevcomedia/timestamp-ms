@@ -50,26 +50,31 @@ describe('Timestamp', () => {
   });
 
   describe('Unix time input', () => {
-    it('should accept negative Unix time', (done) => {
-      chai.request(server)
-        .get('/-100')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix').equal(-100);
-          done();
-        });
-    });
+    const inputs = [
+      {
+        label: 'should accept negative Unix time',
+        route: '/-100',
+        expectedUnixTime: -100
+      },
+      {
+        label: 'should truncate fractional Unix time',
+        route: '/1.5',
+        expectedUnixTime: 1
+      }
+    ];
 
-    it('should truncate fractional Unix time', (done) => {
-      chai.request(server)
-        .get('/1.5')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix').equal(1);
-          done();
-        });
+    const end = (done, expectedUnixTime) => (err, res) => {
+      res.should.have.status(200);
+      res.body.should.be.an('object').that.has.property('unix').equal(expectedUnixTime);
+      done();
+    };
+
+    inputs.forEach(({label, route, expectedUnixTime}) => {
+      it(label, (done) => {
+        chai.request(server)
+          .get(route)
+          .end(end(done, expectedUnixTime));
+      });
     });
   });
 
