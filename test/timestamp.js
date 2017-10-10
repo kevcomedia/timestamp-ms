@@ -12,9 +12,7 @@ describe('Timestamp', () => {
   let server;
 
   before(() => {
-    server = app.listen(8888, () => {
-      console.log('App is alive at port 8888 for testing.');
-    });
+    server = app.listen(8888);
   });
 
   after(() => server.close());
