@@ -124,28 +124,31 @@ describe('Timestamp', () => {
   });
 
   describe('Invalid input', () => {
-    it('should treat non-date formats as invalid', (done) => {
-      chai.request(server)
-        .get('/a')
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix').to.be.null;
-          res.body.should.have.own.property('natural').to.be.null;
-          done();
-        });
-    });
+    const inputs = [
+      {
+        label: 'should treat non-date formats as invalid',
+        route: '/a'
+      },
+      {
+        label: 'should treat unsafe integers as invalid',
+        route: '/9007199254740992'
+      }
+    ];
 
-    it('should treat unsafe integers as invalid', (done) => {
-      chai.request(server)
-        .get('/9007199254740992')
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.be.an('object');
-          res.body.should.have.own.property('unix').to.be.null;
-          res.body.should.have.own.property('natural').to.be.null;
-          done();
-        });
+    const end = (done) => (err, res) => {
+      res.should.have.status(400);
+      res.body.should.be.an('object');
+      res.body.should.have.own.property('unix').that.is.null;
+      res.body.should.have.own.property('natural').that.is.null;
+      done();
+    };
+
+    inputs.forEach(({label, route}) => {
+      it(label, (done) => {
+        chai.request(server)
+          .get(route)
+          .end(end(done));
+      });
     });
   });
 });
