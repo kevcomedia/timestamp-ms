@@ -48,7 +48,7 @@ describe('Timestamp', () => {
       chai.request(server)
         .get('/invalid')
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(400);
           res.body.should.be.an('object');
           res.body.should.have.own.property('unix');
           res.body.should.have.own.property('natural');
@@ -132,7 +132,7 @@ describe('Timestamp', () => {
       chai.request(server)
         .get('/a')
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(400);
           res.body.should.be.an('object');
           res.body.should.have.own.property('unix').to.be.null;
           res.body.should.have.own.property('natural').to.be.null;
@@ -144,7 +144,7 @@ describe('Timestamp', () => {
       chai.request(server)
         .get('/9007199254740992')
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(400);
           res.body.should.be.an('object');
           res.body.should.have.own.property('unix').to.be.null;
           res.body.should.have.own.property('natural').to.be.null;
