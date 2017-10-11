@@ -76,6 +76,17 @@ describe('Timestamp', () => {
           .end(end(done, expectedUnixTime));
       });
     });
+
+    it('should be December 31, 1969 if Unix time is -1', (done) => {
+      chai.request(server)
+        .get('/-1')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object')
+            .that.has.property('natural').that.equals('December 31, 1969');
+          done();
+        });
+    });
   });
 
   describe('Natural date input', () => {

@@ -1,6 +1,7 @@
 const moment = require('moment');
 
 const dateFormats = [
+  'X',
   'MMMM D, Y',
   'MMMM D Y',
   'D MMMM Y',
@@ -46,19 +47,15 @@ function createTimestampObject(m = null) {
 function getTimestamp(req, res) {
   const {date} = req.params;
   let timestamp;
-  let statusCode = 200;
+  let statusCode = 400;
 
-  const fromUnix = moment.unix(date);
-  const fromNatural
-    = moment.utc(date, dateFormats, true);
+  const m = moment.utc(date, dateFormats, true);
 
-  if (fromUnix.isValid()) {
-    timestamp = createTimestampObject(fromUnix);
-  } else if (fromNatural.isValid()) {
-    timestamp = createTimestampObject(fromNatural);
+  if (m.isValid()) {
+    timestamp = createTimestampObject(m);
+    statusCode = 200;
   } else {
     timestamp = createTimestampObject();
-    statusCode = 400;
   }
 
   res.status(statusCode).json(timestamp);
