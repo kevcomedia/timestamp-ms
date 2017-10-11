@@ -8,6 +8,7 @@ cache:
 
 script:
   - npm test
+  - npm run lint
 
 os:
   - linux
