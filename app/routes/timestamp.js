@@ -47,15 +47,15 @@ function createTimestampObject(m = null) {
 function getTimestamp(req, res) {
   const {date} = req.params;
   let timestamp;
-  let statusCode = 200;
+  let statusCode = 400;
 
   const m = moment.utc(date, dateFormats, true);
 
   if (m.isValid()) {
     timestamp = createTimestampObject(m);
+    statusCode = 200;
   } else {
     timestamp = createTimestampObject();
-    statusCode = 400;
   }
 
   res.status(statusCode).json(timestamp);
