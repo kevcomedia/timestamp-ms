@@ -4,8 +4,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
 
-const should = chai.should();
-
+chai.should();
 chai.use(chaiHttp);
 
 describe('Timestamp', () => {
@@ -65,7 +64,8 @@ describe('Timestamp', () => {
 
     const end = (done, expectedUnixTime) => (err, res) => {
       res.should.have.status(200);
-      res.body.should.be.an('object').that.has.property('unix').equal(expectedUnixTime);
+      res.body.should.be.an('object')
+        .that.has.property('unix').equal(expectedUnixTime);
       done();
     };
 
