@@ -8,19 +8,19 @@ const dateFormats = [
   'MMM D, Y',
   'MMM D Y',
   'D MMM Y',
-  'Y MMM D'
+  'Y MMM D',
 ];
 
 function createTimestampObject(m = null) {
   if (m) {
     return {
       unix: m.unix(),
-      natural: m.format('MMMM D, YYYY')
+      natural: m.format('MMMM D, YYYY'),
     };
   } else {
     return {
       unix: null,
-      natural: null
+      natural: null,
     };
   }
 }
