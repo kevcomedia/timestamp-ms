@@ -12,11 +12,11 @@ chai.use(chaiHttp);
 describe('Timestamp', () => {
   let server;
 
-  before(() => {
-    server = app.listen(8888);
+  before((done) => {
+    server = app.listen(8888, done);
   });
 
-  after(() => server.close());
+  after((done) => server.close(done));
 
   describe('Proper output keys', () => {
     const inputs = [
